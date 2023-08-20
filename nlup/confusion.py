@@ -34,3 +34,28 @@ INF = float("inf")
 
 class ConfusionMixin(object):
   """Confusion methods shared by all three non-abstract classes."""
+
+  def batch_update(self, truths, guesses):
+    for (truth, guess) in zip(truths, guesses):
+      self.update(truth, guess)
+
+  @property
+  def confint(self):
+    """Computes 95% binomial confidence intervals.
+
+    This method computes the 95% binomial confidence interval for sample
+    accuracy using the Wilson method. The lower bound is particularly
+    useful in system ranking.
+
+    The return value is a (lower_bound, upper_bound) tuple.
+    """
+    if not len(self):
+      return (0., 1.)
+    n = len(self)
+    phat = self.accuracy
+    z = 1.9599639845400538273879   # -qnorm(.05 / 2)
+    zsq = z * z
+    a1 = 1. / (1. + zsq / n)
+    a2 = phat + zsq / (2 * n)
+    a3 = z * sqrt(phat * (1. - phat) / n + zsq / (4 * n * n))
+    

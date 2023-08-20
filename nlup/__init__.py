@@ -23,4 +23,6 @@
 from .confusion import *
 from .decorators import *
 from .perceptron import *
-from .re
+from .readers import *
+from .timer import *
+from .util import *

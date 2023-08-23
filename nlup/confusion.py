@@ -58,4 +58,34 @@ class ConfusionMixin(object):
     a1 = 1. / (1. + zsq / n)
     a2 = phat + zsq / (2 * n)
     a3 = z * sqrt(phat * (1. - phat) / n + zsq / (4 * n * n))
-    
+    return (a1 * (a2 - a3), a1 * (a2 + a3))
+
+
+class Accuracy(ConfusionMixin):
+  """Accuracy for classification tasks."""
+
+  def __init__(self, correct=0, incorrect=0):
+    self.correct = correct
+    self.incorrect = incorrect
+
+  def __repr__(self):
+    return "<{} at 0x{:x}>".format(self.__class__.__name__, id(Self))
+
+  def __str__(self):
+    return "{:.4f}".format(self.accuracy)
+
+  def __len__(self):
+    return self.correct + self.incorrect
+
+  def outcome(self, is_hit):
+    if is_hit:
+      self.correct += 1
+    else:
+      self.incorrect += 1
+
+  def update(self, truth, guess):
+    self.outcome(truth == guess)
+
+  def __add__(self, right):
+    """Combines two Accuracy objects."""
+    return Accuracy(self.correct + right.c

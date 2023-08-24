@@ -88,4 +88,34 @@ class Accuracy(ConfusionMixin):
 
   def __add__(self, right):
     """Combines two Accuracy objects."""
-    return Accuracy(self.correct + right.c
+    return Accuracy(self.correct + right.correct,
+                    self.incorrect + right.incorrect)
+
+  @property
+  def accuracy(self):
+    return self.correct / len(self)
+
+
+class BinaryConfusion(ConfusionMixin):
+  """Binary confusion matrix for classification tasks."""
+
+  def __init__(self, hit=True, tp=0, fp=0, fn=0, tn=0):
+    self.hit = hit
+    self.tp = tp
+    self.fp = fp
+    self.fn = fn
+    self.tn = tn
+
+  def __repr__(self):
+    return "<{} at 0x{:x}>".format(self.__class__.__name__, id(Self))
+
+  def pprint(self):
+    """
+    >>> cm = BinaryConfusion()
+    >>> cm.tp = 5809125
+    >>> cm.tn = 2235458
+    >>> cm.fp = cm.fn = 1
+    >>> cm.pprint()
+    Truth | Guess
+    ---------------------------------------
+          |       Hit  

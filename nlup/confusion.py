@@ -167,4 +167,30 @@ F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
     try:
       return (self.tp + self.tn) / len(self)
     except ZeroDivisionError:
-    
+      return NAN
+
+  @property
+  def Kappa(self):
+    """Cohen's Kappa for interannotator agreement."""
+    # Probability the two sources say yes
+    if len(self) == 0:
+      return NAN
+    Px = (self.tp + self.fp) / len(self)
+    Py = (self.tp + self.fn) / len(self)
+    # Probability of chance agreement.
+    Pe = (Px * Py) + ((1. - Px) * (1. - Py))
+    return (self.accuracy - Pe) / (1. - Pe)
+
+  def Fscore(self, ratio=1.):
+    """F-score, by default F_1 (equal weight to precision and recall)."""
+    assert ratio > 0.
+    r_square = ratio * ratio
+    P = self.precision
+    R = self.recall
+    return ((1. + r_square) * P * R) / (r_square * P + R)
+
+  @property
+  def F1(self):
+    return self.Fscore()
+
+  def Sscore(self, r

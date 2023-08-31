@@ -143,4 +143,28 @@ F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
     truth = bool(truth)
     guess = bool(guess)
     if truth:
-  
+      if guess:
+        self.tp += 1
+      else:
+        self.fn += 1
+    elif guess:
+      self.fp += 1
+    else:
+      self.tn += 1
+
+  def __add__(self, right):
+    """Combines two BinaryConfusion objects."""
+    if self.hit != right.hit:
+      raise ValueError("Operands do not have matching 'hit' label.")
+    return BinaryConfusion(hit=self.hit,
+                           tp=self.tp + right.tp,
+                           fp=self.fp + right.fp,
+                           fn=self.fn + right.fn,
+                           tn=self.tn + right.tn)
+
+  @property
+  def accuracy(self):
+    try:
+      return (self.tp + self.tn) / len(self)
+    except ZeroDivisionError:
+    

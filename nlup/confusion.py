@@ -118,4 +118,29 @@ class BinaryConfusion(ConfusionMixin):
     >>> cm.pprint()
     Truth | Guess
     ---------------------------------------
-          |       Hit  
+          |       Hit         Miss
+     Hit  | 5,809,125            1
+     Miss |         1    2,235,458
+    """
+    print("""Truth | Guess
+---------------------------------------
+      |       Hit         Miss
+ Hit  | {:>9,}    {:>9,}
+ Miss | {:>9,}    {:>9,}""".format(self.tp, self.fn, self.fp, self.tn))
+
+  @property
+  def summary(self):
+    return """Accuracy:\t{:.4f}
+Precision:\t{:.4f}
+Recall:\t\t{:.4f}
+F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
+                        self.recall, self.F1)
+
+  def __len__(self):
+    return self.tp + self.fp + self.fn + self.tn
+
+  def update(self, truth, guess):
+    truth = bool(truth)
+    guess = bool(guess)
+    if truth:
+  

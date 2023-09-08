@@ -193,4 +193,33 @@ F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
   def F1(self):
     return self.Fscore()
 
-  def Sscore(self, r
+  def Sscore(self, ratio=1.):
+    """S-score, by default S_1 (equal weight to specificity and sensitivity)."""
+    assert ratio > 0.
+    r_square = ratio * ratio
+    Sp = self.specificity
+    Se = self.sensitivity
+    return ((1. + r_square) * Sp * Se) / (r_square * Sp + Se)
+
+  @property
+  def S1(self):
+    return self.Sscore()
+
+  @property
+  def youden_J(self):
+    """Youden's J statistic."""
+    return self.sensitivity + self.specificity - 1.
+
+  @property
+  def MCC(self):
+    try:
+      N = len(self)
+      S = (self.tp + self.fn) / N
+      P = (self.tp + self.fp) / N
+      PS = P * S
+      denom = sqrt(PS * (1. - S) * (1. - P))
+      return ((self.tp / N) - PS) / denom
+    except ZeroDivisionError:
+      return NAN
+
+  # Preci

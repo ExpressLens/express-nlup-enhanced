@@ -222,4 +222,51 @@ F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
     except ZeroDivisionError:
       return NAN
 
-  # Preci
+  # Precision.
+
+  @property
+  def precision(self):
+    try:
+      return self.tp / (self.tp + self.fp)
+    except ZeroDivisionError:
+      return INF
+
+  @property
+  def PPV(self):
+    return self.precision
+
+  # Recall.
+
+  @property
+  def recall(self):
+    try:
+      return self.tp / (self.tp + self.fn)
+    except ZeroDivisionError:
+      return INF
+
+  @property
+  def sensitivity(self):
+    return self.recall
+
+  @property
+  def TPR(self):
+    return self.recall
+
+  # Specificity.
+
+  @property
+  def specificity(self):
+    try:
+      return self.tn / (self.tn + self.fp)
+    except ZeroDivisionError:
+      return INF
+
+  @property
+  def TNR(self):
+    return self.specificity
+
+  # Others, rarely used.
+
+  @property
+  def FPR(self):
+    try:

@@ -270,3 +270,36 @@ F1:\t\t{:.4f}""".format(self.accuracy, self.precision,
   @property
   def FPR(self):
     try:
+      return self.fp / (self.fp + self.tn)
+    except ZeroDivisionError:
+      return INF
+
+  @property
+  def NPV(self):
+    try:
+      return self.tn / (self.tn + self.fn)
+    except ZeroDivisionError:
+      return INF
+
+  @property
+  def FDR(self):
+    return 1. - self.PPV
+
+
+class Confusion(ConfusionMixin):
+  """Generic multiclass confusion matrix."""
+
+  def __init__(self):
+    self.matrix = defaultdict(partial(defaultdict, int))
+    self.correct = 0
+    self.incorrect = 0
+
+  def __len__(self):
+    return self.correct + self.incorrect
+
+  def __repr__(self):
+    return "<{} at 0x{:x}>".format(self.__class__.__name__, id(Self))
+
+  def pprint(self):
+    print("Confusion matrix:")
+    for (truth, guess_count) in self.matrix.items(

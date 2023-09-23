@@ -302,4 +302,26 @@ class Confusion(ConfusionMixin):
 
   def pprint(self):
     print("Confusion matrix:")
-    for (truth, guess_count) in self.matrix.items(
+    for (truth, guess_count) in self.matrix.items():
+      print("{}:".format(truth))
+      for (guess, count) in guess_count.items():
+        print("\t{}: {:,}".format(guess, count))
+
+  def update(self, truth, guess, k=1):
+    self.matrix[truth][guess] += k
+    if truth == guess:
+      self.correct += 1
+    else:
+      self.incorrect += 1
+
+  def __add__(self, right):
+    """Combines two Confusion objects."""
+    # Constructs new Confusion instance.
+    retval = Confusion()
+    retval.matrix = self.matrix.copy()
+    for (truth, guess_count) in right.matrix.items():
+      truth_ptr = retval.matrix[truth]
+      for (guess, count) in guess_count.items():
+        truth_ptr[guess] += count
+      retval.correct = self.correct + right.correct
+      retval.incorrect = self.incorre

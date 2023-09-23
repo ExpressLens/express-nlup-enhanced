@@ -324,4 +324,24 @@ class Confusion(ConfusionMixin):
       for (guess, count) in guess_count.items():
         truth_ptr[guess] += count
       retval.correct = self.correct + right.correct
-      retval.incorrect = self.incorre
+      retval.incorrect = self.incorrect + right.incorrect
+      return retval
+
+  @property
+  def accuracy(self):
+    return self.correct / (self.correct + self.incorrect)
+
+  @property    
+  def Kappa(self):
+    """Cohen's Kappa for interannotator agreement."""
+    Pe = 0.
+    Z = sum(sum(gf.values()) for gf in self.matrix.values())
+    for (truth, guess_count) in self.matrix.items():
+       Pe_i = sum(guess_count.values()) / Z
+       Pe += Pe_i * Pe_i
+    return (self.accuracy - Pe) / (1. - Pe)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

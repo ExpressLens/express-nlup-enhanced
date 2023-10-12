@@ -13,4 +13,25 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 # OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNE
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+import gzip
+import jsonpickle
+
+
+class JSONable(object):
+  """Mixin which makes a class support `jsonpickle`."""
+
+  @classmethod
+  def load(cls, filename):
+    with gzip.GzipFile(filename, "r") as source:
+      return jsonpickle.decode(source.read().decode("UTF-8"), keys=True)
+
+  def dump(self, filename):
+    with gzip.GzipFile(filename, "w") as sink:
+      sink.write(jsonpickle.encode(self, keys=T

@@ -34,4 +34,4 @@ class JSONable(object):
 
   def dump(self, filename):
     with gzip.GzipFile(filename, "w") as sink:
-      sink.write(jsonpickle.encode(self, keys=T
+      sink.write(jsonpickle.encode(self, keys=True).encode("UTF-8"))

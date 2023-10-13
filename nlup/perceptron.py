@@ -26,4 +26,35 @@
 * `Perceptron`: multiclass perceptron classifier
 * `SequencePerceptron`: multiclass perceptron for sequence tagging
 * `BinaryAveragedPerceptron`: binary averaged perceptron classifier
-* `AveragedPerceptron`: multiclass aver
+* `AveragedPerceptron`: multiclass averaged perceptron
+* `SequenceAveragedPerceptron`: multiclass averaged perceptron for
+   sequence tagging
+"""
+
+
+import logging
+
+from collections import defaultdict
+from collections import namedtuple
+from functools import partial
+from operator import itemgetter
+from random import Random
+
+from .confusion import Accuracy
+from .decorators import reversify
+from .decorators import tupleify
+from .jsonable import JSONable
+from .timer import Timer
+
+
+INF = float("inf")
+ORDER = 0
+EPOCHS = 1
+
+
+class Classifier(JSONable):
+  """Mixin for shared classifier methods."""
+
+  def fit(self, Y, Phi, epochs=EPOCHS, alpha=1):
+    data = list(zip(Y, Phi))  # Which is a copy.
+    logging.info("Starting {} epoch(s) of tra

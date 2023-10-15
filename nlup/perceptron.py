@@ -82,4 +82,30 @@ class BinaryPerceptron(Classifier):
 
   def score(self, phi):
     """Gets score for a feature vector."""
-    return sum(self.weights[feature]
+    return sum(self.weights[feature] for feature in phi)
+
+  def predict(self, phi):
+    """Predicts binary decision for a feature vector."""
+    return self.score(phi) >= 0
+
+  def fit_one(self, y, phi, alpha=1):
+    yhat = self.predict(phi)
+    if y != yhat:
+      self.update(y, phi, alpha)
+    return yhat
+
+  def update(self, y, phi, alpha=1):
+    """Rewards correct observation for a feature vector."""
+    assert y in (True, False)
+    assert 0. < alpha <= 1.
+    if y is False:
+      alpha *= -1
+    for phi_i in phi:
+      self.weights[phi_i] += alpha
+
+
+class Perceptron(Classifier):
+  """Multiclass perceptron with sparse binary feature vectors.
+
+  Each class (i.e., label, outcome) is represented as a hashable item, such as a
+  string. Features a

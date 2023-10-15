@@ -108,4 +108,18 @@ class Perceptron(Classifier):
   """Multiclass perceptron with sparse binary feature vectors.
 
   Each class (i.e., label, outcome) is represented as a hashable item, such as a
-  string. Features a
+  string. Features are represented as hashable objects (preferably strings, as
+  Python dictionaries have been aggressively optimized for this case). Presence
+  of a feature indicates that that feature is "firing" and absence indicates
+  that it is not firing. This class is primarily to be used as an abstract base
+  class; in most cases, the regularization and stability afforded by the
+  averaged perceptron (`AveragedPerceptron`) will be worth it.
+
+  The perceptron was first proposed in the following paper:
+
+  F. Rosenblatt. 1958. The perceptron: A probabilistic model for information
+  storage and organization in the brain. Psychological Review 65(6): 386-408.
+  """
+
+  def __init__(self, classes=(), seed=None):
+    s

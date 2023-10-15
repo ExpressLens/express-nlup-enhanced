@@ -57,4 +57,29 @@ class Classifier(JSONable):
 
   def fit(self, Y, Phi, epochs=EPOCHS, alpha=1):
     data = list(zip(Y, Phi))  # Which is a copy.
-    logging.info("Starting {} epoch(s) of tra
+    logging.info("Starting {} epoch(s) of training.".format(epochs))
+    for epoch in range(1, 1 + epochs):
+      logging.info("Epoch {:>2}.".format(epoch))
+      accuracy = Accuracy()
+      self.random.shuffle(data)
+      with Timer():
+        for (y, phi) in data:
+          yhat = self.fit_one(y, phi, alpha)
+          accuracy.update(y, yhat)
+      logging.info("Accuracy: {!s}".format(accuracy))
+    self.finalize()
+
+  def finalize(self):
+    pass
+
+
+class BinaryPerceptron(Classifier):
+  """Binary perceptron classifier."""
+
+  def __init__(self, seed=None):
+    self.random = Random(seed)
+    self.weights = defaultdict(int)
+
+  def score(self, phi):
+    """Gets score for a feature vector."""
+    return sum(self.weights[feature]

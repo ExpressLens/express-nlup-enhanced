@@ -122,4 +122,27 @@ class Perceptron(Classifier):
   """
 
   def __init__(self, classes=(), seed=None):
-    s
+    self.classes = tuple(classes)
+    self.random = Random(seed)
+    self.weights = defaultdict(partial(defaultdict, int))
+
+  def register_classes(self, classes):
+    """Registers class labels in classifier instance."""
+    self.classes = tuple(classes)
+
+  def score(self, y, phi):
+    """Gets score for a feature vector/class pair."""
+    assert self.classes
+    return sum(self.weights[phi_i][y] for phi_i in phi)
+
+  def scores(self, phi):
+    """Get scores for a feature vector for all classes."""
+    assert self.classes
+    scores = dict.fromkeys(self.classes, 0)
+    for phi_i in phi:
+      for (cls, weight) in self.weights[phi_i].items():
+        scores[cls] += weight
+    return scores
+
+  def predict(self, phi):
+    """Pre

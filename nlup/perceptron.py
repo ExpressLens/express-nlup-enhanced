@@ -145,4 +145,28 @@ class Perceptron(Classifier):
     return scores
 
   def predict(self, phi):
-    """Pre
+    """Predicts most likely class for a feature vector."""
+    scores = self.scores(phi)
+    (argmax_score, _) = max(scores.items(), key=itemgetter(1))
+    return argmax_score
+
+  def fit_one(self, y, phi, alpha=1):
+    yhat = self.predict(phi)
+    if y != yhat:
+      self.update(y, yhat, phi, alpha)
+    return yhat
+
+  def update(self, y, yhat, phi, alpha=1):
+    """Rewards correct observation and penalizes incorrect observation for a
+    feature vector."""
+    for phi_i in phi:
+      ptr = self.weights[phi_i]
+      ptr[y] += alpha
+      ptr[yhat] -= alpha
+
+
+TrellisCell = namedtuple("TrellisCell", ["score", "pointer"])
+
+
+class SequencePerceptron(Perceptron):
+  """Perceptron with Viterbi-decoding powe

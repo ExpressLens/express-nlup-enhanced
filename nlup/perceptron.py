@@ -169,4 +169,23 @@ TrellisCell = namedtuple("TrellisCell", ["score", "pointer"])
 
 
 class SequencePerceptron(Perceptron):
-  """Perceptron with Viterbi-decoding powe
+  """Perceptron with Viterbi-decoding powers."""
+
+  def __init__(self, efeats_fnc, tfeats_fnc, order=ORDER, **kwargs):
+    super(SequencePerceptron, self).__init__(**kwargs)
+    self.efeats_fnc = efeats_fnc
+    self.tfeats_fnc = tfeats_fnc
+    self.order = order
+
+  def predict(self, xx):
+    """Tags a sequence using a greedy approximation of the Viterbi algorithm.
+
+    This method tag a sequence using a greedy approximation in which each
+    sequence is tagged using transition features based on earlier hypotheses.
+    The time complexity of this operation is O(nt) where n is sequence length
+    and t is the cardinality of the tagset.
+    """
+    (yyhat, _) = self._greedy_predict(xx)
+    return yyhat
+
+  def predict_with_transitions(se

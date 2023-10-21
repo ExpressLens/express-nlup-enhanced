@@ -188,4 +188,24 @@ class SequencePerceptron(Perceptron):
     (yyhat, _) = self._greedy_predict(xx)
     return yyhat
 
-  def predict_with_transitions(se
+  def predict_with_transitions(self, xx):
+    """Same as above, but hacked to give you the features back."""
+    return self._greedy_predict(xx)
+
+  def _greedy_predict(self, xx):
+    """Sequence classification with a greedy approximation."""
+    yyhat = []
+    phiphi = []
+    for phi in self.efeats_fnc(xx):
+      phi = phi + self.tfeats_fnc(yyhat[-self.order:])
+      yhat = max(self.scores(phi).items(), key=itemgetter(1))[0]
+      yyhat.append(yhat)
+      phiphi.append(phi)
+    return (tuple(yyhat), tuple(phiphi))
+
+  def fit_one(self, yy, xx, alpha=1):
+    # Decodes to get predicted sequence.
+    (yyhat, phiphi) = self.predict_with_transitions(xx)
+    for (y, yhat, phi) in zip(yy, yyhat, phiphi):
+      if y != yhat:
+        self.update(

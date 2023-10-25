@@ -242,4 +242,39 @@ class LazyWeight(object):
 
   # Initializes.
   >>> t = 0
-  >>> 
+  >>> lw = LazyWeight(t=t)
+  >>> t += 1
+  >>> lw.update(t, 1)
+  >>> t += 1
+  >>> lw.get()
+  1
+
+  # Some time passes...
+  >>> t += 1
+  >>> lw.get()
+  1
+
+  # Weight is now changed.
+  >>> lw.update(-1, t)
+  >>> t += 3
+  >>> lw.update(-1, t)
+  >>> t += 3
+  >>> lw.get()
+  -1
+  """
+
+  def __init__(self, default_factory=int, t=0):
+    self.timestamp = t
+    self.weight = default_factory()
+    self.summed_weight = default_factory()
+
+  def __repr__(self):
+    return "<{} at 0x{:x}>".format(self.__class__.__name__, id(self))
+
+  def get(self):
+    """Returns current weight."""
+    return self.weight
+
+  def _freshen(self, t):
+    """Applies queued updates, and updates the timestamp."""
+    self.summed_weight += (t - self.timestamp) * self.weight

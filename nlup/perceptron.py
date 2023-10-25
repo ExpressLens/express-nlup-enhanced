@@ -230,4 +230,16 @@ class LazyWeight(object):
   """Lazily-computed averaged weight.
 
   Instances of this class are essentially triplets of values which represent a
-  weight of a single featu
+  weight of a single feature in an averaged perceptron. This representation
+  permits "averaging" to be done implicitly, and allows us to take advantage of
+  sparsity in the feature space. First, as the name suggests, the
+  `summed_weight` variable is lazily computed. This summed weight is the one
+  used in actual inference: we need not average explicitly. Lazy computation
+  requires us to store two other numbers. First, we store the current weight,
+  and the last time this weight was updated. When we need the real value of the
+  summed weight (for inference), we "freshen" the summed weight by adding to it
+  the product of the real weight and the time elapsed.
+
+  # Initializes.
+  >>> t = 0
+  >>> 

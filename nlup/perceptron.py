@@ -208,4 +208,26 @@ class SequencePerceptron(Perceptron):
     (yyhat, phiphi) = self.predict_with_transitions(xx)
     for (y, yhat, phi) in zip(yy, yyhat, phiphi):
       if y != yhat:
-        self.update(
+        self.update(y, yhat, phi, alpha)
+    return yyhat
+
+  def fit(self, YY, XX, epochs=EPOCHS, alpha=1):
+    data = list(zip(YY, XX))
+    logging.info("Starting {} epoch(s) of training.".format(epochs))
+    for epoch in range(1, 1 + epochs):
+      logging.info("Epoch {:>2}.".format(epoch))
+      accuracy = Accuracy()
+      self.random.shuffle(data)
+      with Timer():
+        for (yy, xx) in data:
+          yyhat = self.fit_one(yy, xx, alpha)
+          accuracy.batch_update(yy, yyhat)
+      logging.info("Accuracy: {!s}".format(accuracy))
+    self.finalize()
+
+
+class LazyWeight(object):
+  """Lazily-computed averaged weight.
+
+  Instances of this class are essentially triplets of values which represent a
+  weight of a single featu

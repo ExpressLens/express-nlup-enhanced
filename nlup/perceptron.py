@@ -278,3 +278,30 @@ class LazyWeight(object):
   def _freshen(self, t):
     """Applies queued updates, and updates the timestamp."""
     self.summed_weight += (t - self.timestamp) * self.weight
+    self.timestamp = t
+
+  def update(self, value, t):
+    """Brings sum of weights up to date, then adds `value` to the weight."""
+    self._freshen(t)
+    self.weight += value
+
+  def average(self, t):
+    """Sets `self.weight` to the summed value, for final inference."""
+    self._freshen(t)
+    self.weight = self.summed_weight / t
+
+
+class BinaryAveragedPerceptron(BinaryPerceptron):
+
+  def __init__(self, seed=None):
+    self.random = Random(seed)
+    self.weights = defaultdict(LazyWeight)
+    self.time = 0
+
+  def predict(self, phi):
+    """Predicts most likely class for a feature vector."""
+    score = sum(self.weights[feature].get() for feature in phi)
+    return score >= 0
+
+  def fit_one(self, y, phi, alpha=1):
+   

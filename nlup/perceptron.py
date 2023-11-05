@@ -349,4 +349,25 @@ class AveragedPerceptron(Perceptron):
   def scores(self, phi):
     """Get scores for a feature vector for all classes."""
     scores = dict.fromkeys(self.classes, 0)
-    for
+    for phi_i in phi:
+      for (cls, weight) in self.weights[phi_i].items():
+        scores[cls] += weight.get()
+    return scores
+
+  def fit_one(self, y, phi, alpha=1):
+    retval = super(AveragedPerceptron, self).fit_one(y, phi, alpha)
+    self.time += 1
+    return retval
+
+  def update(self, y, yhat, phi, alpha=1):
+    """Rewards correct observation and penalizes incorrect observation for a
+    feature vector."""
+    for phi_i in phi:
+      ptr = self.weights[phi_i]
+      ptr[y].update(+alpha, self.time)
+      ptr[yhat].update(-alpha, self.time)
+
+  def finalize(self):
+    """Removes zero-valued weights and averages."""
+    # TODO(kbg): also remove zero-valued weights?
+    for (phi_i, clsweights) in self.

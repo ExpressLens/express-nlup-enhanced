@@ -304,4 +304,28 @@ class BinaryAveragedPerceptron(BinaryPerceptron):
     return score >= 0
 
   def fit_one(self, y, phi, alpha=1):
-   
+    retval = super(BinaryAveragedPerceptron, self).fit_one(y, phi, alpha)
+    self.time += 1
+    return retval
+
+  def update(self, y, phi, alpha=1):
+    """Rewards correct observation and penalizes incorrect observation for a
+    feature vector."""
+    assert y in (True, False)
+    assert 0. < alpha <= 1.
+    if y is False:
+      alpha *= -1
+    for phi_i in phi:
+      self.weights[phi_i].update(alpha, self.time)
+
+  def finalize(self):
+    """Removes zero-valued weights and averages."""
+    # TODO(kbg): also remove zero-valued weights?
+    for (feature, weight) in self.weights.items():
+      weight.average(self.time)
+
+
+class AveragedPerceptron(Perceptron):
+  """Averaged perceptron classifier.
+
+  This class add

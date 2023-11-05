@@ -328,4 +328,25 @@ class BinaryAveragedPerceptron(BinaryPerceptron):
 class AveragedPerceptron(Perceptron):
   """Averaged perceptron classifier.
 
-  This class add
+  This class adds averaging for stability and regularization.
+
+  Averaging was originally proposed in the following paper:
+
+  Y. Freund and R.E. Schapire. 1999. Large margin classification using
+  the perceptron algorithm. Machine Learning 37(3): 227-296.
+  """
+
+  def __init__(self, classes=(), seed=None):
+    self.classes = tuple(classes)
+    self.random = Random(seed)
+    self.weights = defaultdict(partial(defaultdict, LazyWeight))
+    self.time = 0
+
+  def score(self, y, phi):
+    """Gets score for a feature vector/class pair."""
+    return sum(self.weights[phi_i][y].get() for phi_i in phi)
+
+  def scores(self, phi):
+    """Get scores for a feature vector for all classes."""
+    scores = dict.fromkeys(self.classes, 0)
+    for

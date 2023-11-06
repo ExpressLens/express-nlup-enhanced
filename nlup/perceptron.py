@@ -370,4 +370,16 @@ class AveragedPerceptron(Perceptron):
   def finalize(self):
     """Removes zero-valued weights and averages."""
     # TODO(kbg): also remove zero-valued weights?
-    for (phi_i, clsweights) in self.
+    for (phi_i, clsweights) in self.weights.items():
+      for (cls, weight) in clsweights.items():
+        weight.average(self.time)
+
+
+class SequenceAveragedPerceptron(AveragedPerceptron, SequencePerceptron):
+  """Sequence classifier with averaging."""
+
+  def __init__(self, efeats_fnc, tfeats_fnc, order=ORDER, *args, **kwargs):
+    super(SequenceAveragedPerceptron, self).__init__(*args, **kwargs)
+    self.efeats_fnc = efeats_fnc
+    self.tfeats_fnc = tfeats_fnc
+    self.order = order

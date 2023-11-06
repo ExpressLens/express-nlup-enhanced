@@ -191,3 +191,13 @@ def depparsed_corpus(filename):
 
 
 # TODO(kbg) implement these.
+
+
+class ConstituencyParsedSentence(object):
+
+  def __init__(self):
+    raise NotImplementedError
+
+
+def conparsed_reader(filename):
+  raise NotImplementedError

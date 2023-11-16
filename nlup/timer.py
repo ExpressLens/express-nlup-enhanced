@@ -36,4 +36,8 @@ class Timer(object):
     return self
 
   def __exit__(self, *args):
-    self.toc = tim
+    self.toc = time()
+    self.logger("{}s elapsed.".format(int(self.toc - self.tic)))
+
+
+# See decorators.py for a decorator form of the same.

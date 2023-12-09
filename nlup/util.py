@@ -44,4 +44,16 @@ def isnumberlike(token):
     return True
   # Number words.
   if all(part in NUMBER_WORDS for part in token.split("-")):
-    return T
+    return True
+  return False
+
+
+def case_feature(token):
+  """Returns zero or one case features for the `token` string."""
+  if token.islower():
+    return "*lowercase*"
+  if token.isupper():
+    return "*uppercase*"
+  if token.istitle():
+    return "*titlecase*"
+  return

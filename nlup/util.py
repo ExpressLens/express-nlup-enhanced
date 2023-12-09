@@ -25,4 +25,23 @@ from re import sub
 
 NUMBER_WORDS = frozenset("""
 zero one two three four five six seven eight nine ten eleven twelve
-thirteen fourteen fifteen sixteen seventeen eighteen nineteen tw
+thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty
+thirty fourty fifty sixty seventy eighty ninety hundred thousand million
+billion trillion quadrillion
+zeros ones twos threes fours fives sixs sevens eights nines tens elevens
+twelves thirteens fourteens fifteens sixteens seventeens eighteens
+nineteens twenties thirties fourties fifties sixties seventies eighties
+nineties hundreds thousands millions billions trillions quadrillions
+""".upper().split())
+
+
+def isnumberlike(token):
+  """True iff the token string looks like a number."""
+  # Remove /[.,/]/.
+  token = sub(r"[.,/]", "", token)
+  # Generic digit.
+  if token.isdigit():
+    return True
+  # Number words.
+  if all(part in NUMBER_WORDS for part in token.split("-")):
+    return T

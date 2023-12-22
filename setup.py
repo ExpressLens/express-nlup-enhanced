@@ -55,4 +55,6 @@ setup(
         "Topic :: Text Processing :: General",
         "Topic :: Text Processing :: Indexing",
         "Topic :: Scientific/Engineering :: Mathematics",
-        "To
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    ],
+)

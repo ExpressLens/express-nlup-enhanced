@@ -40,4 +40,19 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Pytho
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Other Environment",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Text Processing :: Linguistic",
+        "Topic :: Text Processing :: Filters",
+        "Topic :: Text Processing :: General",
+        "Topic :: Text Processing :: Indexing",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "To
